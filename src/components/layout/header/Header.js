@@ -142,7 +142,7 @@ const Header = () => {
       <RightContainer>
         <Item className="mobile-none" to="#">
           <Label style={{ padding: "10px 16px", color: "white", fontSize: 16 }}>
-            TESTNET (DEMO)
+            LIVE ON CHAIN 0
           </Label>
         </Item>
         {pact.account.account ? (

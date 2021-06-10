@@ -30,11 +30,11 @@ const savedSigning = localStorage.getItem("signing");
 const savedTtl = localStorage.getItem("ttl");
 const chainId = process.env.REACT_APP_KDA_CHAIN_ID || "0";
 const PRECISION = process.env.REACT_APP_KDA_PRECISION || 12;
-const NETWORKID = process.env.REACT_APP_KDA_NETWORK_ID || "testnet04";
+const NETWORKID = process.env.REACT_APP_KDA_NETWORK_ID || "mainnet01";
 const FEE = process.env.REACT_APP_KDA_FEE || 0.003;
 const network =
   process.env.REACT_APP_KDA_NETWORK ||
-  `https://api.testnet.chainweb.com/chainweb/0.0/${NETWORKID}/chain/${chainId}/pact`;
+  `https://api.chainweb.com/chainweb/0.0/${NETWORKID}/chain/${chainId}/pact`;
 
 const creationTime = () => Math.round(new Date().getTime() / 1000) - 10;
 const GAS_PRICE = 0.000000000001;
@@ -1583,7 +1583,7 @@ export const PactProvider = (props) => {
 
   const reserveWallet = async (amount) => {
     try {
-      const pactCode = `(free.kdx-sale.reserve ${JSON.stringify(account.account)} (read-decimal 'amount))`
+      const pactCode = `(kdx.priv-sale.reserve ${JSON.stringify(account.account)} (read-decimal 'amount))`
       const signCmd = {
         pactCode: pactCode,
         caps: [
@@ -1658,7 +1658,7 @@ export const PactProvider = (props) => {
     try {
       let data = await Pact.fetch.local(
         {
-          pactCode: `(free.kdx-sale.read-all-reservations)`,
+          pactCode: `(kdx.priv-sale.read-all-reservations)`,
           meta: Pact.lang.mkMeta(
             "",
             chainId,

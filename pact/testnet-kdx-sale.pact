@@ -1,5 +1,5 @@
-(namespace "kdx")
-(module priv-sale GOVERNANCE
+(namespace "free")
+(module kdx-sale GOVERNANCE
 
   (use coin)
   (use util.guards)
@@ -12,7 +12,7 @@
     amount-kdx:decimal
     status:string)
 
-  (deftable reservations:{reservation})
+  (deftable reservations-v3:{reservation})
 
   (defcap GOVERNANCE ()
     (enforce-guard
@@ -45,9 +45,9 @@
 
   (defconst STATUS_REJECTED:string 'rejected)
 
-  (defconst START_TIME:time (time "2021-06-10T23:59:00Z"))
+  (defconst START_TIME:time (time "2021-06-10T00:59:26Z"))
 
-  (defconst END_TIME:time (time "2021-06-24T23:59:00Z"))
+  (defconst END_TIME:time (time "2021-06-10T21:08:26Z"))
 
   (defun kdx-bank-guard () (create-module-guard "kaddex-admin"))
 
@@ -62,7 +62,7 @@
         ( (tx-id (hash {"account": account, "amount": amount-kda, "salt": (at "block-time" (chain-data))}))
           (g (at 'guard (coin.details account)))
         )
-        (insert reservations (format "{}-{}" [account, tx-id])
+        (insert reservations-v3 (format "{}-{}" [account, tx-id])
           { "account"    : account
           , "amount-kda" : amount-kda
           , "amount-kdx" : 0.0
@@ -77,10 +77,10 @@
 
   (defun approve:string (reservation-id:string)
     (with-capability (OPS)
-      (with-read reservations reservation-id
+      (with-read reservations-v3 reservation-id
         { "status"     := status }
         (enforce (= status STATUS_REQUESTED) "request is not open")
-        (update reservations reservation-id
+        (update reservations-v3 reservation-id
           { "status" : STATUS_APPROVED })
         (format "request {} approved" [reservation-id])
       )
@@ -89,12 +89,12 @@
 
   (defun reject:string (reservation-id:string)
     (with-capability (OPS)
-      (with-read reservations reservation-id
+      (with-read reservations-v3 reservation-id
         { "status"     := status
         , "amount-kda" := amount-kda
         , "account"    := account }
         (enforce (= status STATUS_REQUESTED) "request is not open")
-        (update reservations reservation-id
+        (update reservations-v3 reservation-id
           { "status" : STATUS_REJECTED })
         (install-capability (coin.TRANSFER KDX_BANK account amount-kda))
         (coin.transfer KDX_BANK account amount-kda)
@@ -106,10 +106,10 @@
 
   (defun approve-helper:string (reservation-id:string)
     (require-capability (OPS))
-    (with-read reservations reservation-id
+    (with-read reservations-v3 reservation-id
       { "status"     := status }
       (if (= status STATUS_REQUESTED)
-        (update reservations reservation-id
+        (update reservations-v3 reservation-id
           { "status" : STATUS_APPROVED })
         "skipping case"
       )
@@ -124,13 +124,13 @@
 
   (defun update-kdx-amount (kdx-ratio:decimal reservation-id:string)
     (require-capability (OPS))
-    (with-read reservations reservation-id
+    (with-read reservations-v3 reservation-id
       { "status"     := status
       , "amount-kda" := amount-kda
       , "account"    := account }
       (enforce (!= status STATUS_REQUESTED) "one or more requests are still open")
       (if (= status STATUS_APPROVED)
-        (update reservations reservation-id
+        (update reservations-v3 reservation-id
           { "amount-kdx" : (* amount-kda kdx-ratio) })
         "skipping case"
       )
@@ -141,7 +141,7 @@
     (with-capability (OPS)
       (let*
         (
-          (approved (select reservations (where 'status (= STATUS_APPROVED))))
+          (approved (select reservations-v3 (where 'status (= STATUS_APPROVED))))
           (total-kda (fold (+) 0.0 (map (at "amount-kda") approved)))
           (ratio (if (> total-kda KDA_SALE_MIN) (/ KDX_SALE_SUPPLY total-kda) KDX_MAX_RATIO))
         )
@@ -151,18 +151,18 @@
   )
 
   (defun read-reservations (account:string)
-    (select reservations (where 'account (= account)))
+    (select reservations-v3 (where 'account (= account)))
   )
 
   (defun read-all-reservations ()
-    (map (read reservations) (get-tx-ids))
+    (map (read reservations-v3) (get-tx-ids))
   )
 
   (defun get-tx-ids ()
-    (keys reservations)
+    (keys reservations-v3)
   )
 
 )
 
-(create-table reservations)
-(init)
+;(create-table reservations-v3)
+; (init)

@@ -124,10 +124,10 @@ const ConnectWalletChainweaverModal = ({ show, onClose, onBack }) => {
                   preview within the wallet before signing
                   </Text>
                   <Input
-                    topLeftLabel={"Public Key"}
-                    placeholder="Insert your Public Key"
+                    topLeftLabel={"Account Name"}
+                    placeholder="Insert your Account (from 'accounts' tab)"
                     value={accountId}
-                    error={accountId !== "" ? !checkKey(accountId) : false}
+                    error={accountId !== ""}
                     onChange={async (e, { value }) => {
                       setAccountId(value);
                     }}
@@ -156,7 +156,7 @@ const ConnectWalletChainweaverModal = ({ show, onClose, onBack }) => {
                     Cancel
                   </MyButton>
                   <MyButton
-                    disabled={!checkKey(accountId)}
+                    disabled={accountId === ""}
                     onClick={() => {
                       handleConnect();
                     }}

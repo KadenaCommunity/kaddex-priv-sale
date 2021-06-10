@@ -73,7 +73,7 @@ const ConnectWalletModal = ({ show, onClose }) => {
                 }
                 description={
                   pact.account?.account
-                    ? `Account ID: ${reduceToken(pact.account.account)}`
+                    ? `Account ID: ${pact.account.account}`
                     : "Connect a wallet using one of the methods below"
                 }
                 containerStyle={{
@@ -107,7 +107,11 @@ const ConnectWalletModal = ({ show, onClose }) => {
                       <LockLogo style={{ marginRight: "10px"}}/>
                       Chainweaver
                     </Button>
+                    <div>
+                    PLEASE ENSURE YOUR ACCOUNT HAS FUNDS ON CHAIN 0
+                    </div>
                   </ContentContainer>
+
                 )}
               </ModalContainer>
             </Container>

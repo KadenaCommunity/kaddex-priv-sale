@@ -40,9 +40,6 @@ const IconsContainer = styled.div`
 const StatsContainer = ({ data }) => {
   const pact = React.useContext(PactContext);
 
-  React.useEffect(async () => {
-    await pact.getPairList();
-  }, []);
 
   React.useEffect(async () => {
     await pact.getReservations();
@@ -89,7 +86,7 @@ const StatsContainer = ({ data }) => {
               <Table.Row key={999999}>
                 <Table.Cell textAlign="center">TOTAL</Table.Cell>
                 <Table.Cell textAlign="center">
-                  {Object.values(pact.reservations).reduce((t, r) => t + parseFloat(r["amount-kda"]), 0)} KDA
+                  {Object.values(pact.reservations).reduce((t, r) => t + (r["status"] !== 'rejected' ? parseFloat(r["amount-kda"]) : 0), 0)} KDA
                 </Table.Cell>
                 <Table.Cell textAlign="center">OPEN</Table.Cell>
               </Table.Row>
