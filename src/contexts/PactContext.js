@@ -1663,7 +1663,7 @@ export const PactProvider = (props) => {
             "",
             chainId,
             GAS_PRICE,
-            3000,
+            100000,
             creationTime(),
             600
           ),

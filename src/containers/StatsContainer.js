@@ -50,6 +50,7 @@ const TotalContainer = styled.div`
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
+    justify-content: space-between;
     align-items: center;
   }
 `;
@@ -61,6 +62,7 @@ const TotalTitle = styled.div`
   @media (max-width: ${({ theme: { mediaQueries } }) =>
   `${mediaQueries.mobilePixel + 1}px`}) {
         margin-right: 0px;
+        margin-bottom: 5px;
   }
 `;
 
@@ -71,6 +73,7 @@ const TotalValue = styled.div`
   @media (max-width: ${({ theme: { mediaQueries } }) =>
   `${mediaQueries.mobilePixel + 1}px`}) {
         margin-left: 0px;
+        margin-top: 5px;
   }
 `;
 
@@ -86,7 +89,7 @@ const StatsContainer = ({ data }) => {
   return (
     <>
       <ModalContainer title="reservation stats" containerStyle={{ maxWidth: 650, maxHeight: window.innerHeight - 200, overflowX: "scroll" }}>
-        {pact.reservations? (
+        {pact.reservations ? (
         <TotalContainer>
           <TotalTitle>TOTAL:</TotalTitle>
           <TotalValue>{Object.values(pact.reservations).reduce((t, r) => t + (r["status"] !== 'rejected' ? parseFloat(r["amount-kda"]) : 0), 0)} KDA</TotalValue>
