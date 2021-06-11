@@ -45,6 +45,11 @@ const SearchContainer = styled.div`
   padding: 0px 16px 0px 30px;
   /* text-shadow: 0 0 3px #FFFFFF; */
   color: #FFFFFF;
+  @media (max-width: ${({ theme: { mediaQueries } }) =>
+  `${mediaQueries.mobilePixel + 1}px`}) {
+        margin-top: 10px;
+        margin-bottom: 60px;
+  }
 `;
 
 const TotalContainer = styled.div`
