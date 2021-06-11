@@ -224,7 +224,7 @@ const Header = () => {
                 style={{ paddingTop: 9, paddingBottom: 9 }}
                 onClick={() =>
                   window.open(
-                    `https://github.com`,
+                    `https://github.com/sportelliguglielmo/kaddex-priv-sale`,
                     "_blank",
                     "noopener,noreferrer"
                   )

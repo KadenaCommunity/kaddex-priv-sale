@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components/macro";
 import ModalContainer from "../components/shared/ModalContainer";
 import { ReactComponent as KadenaLogo } from "../assets/images/crypto/kadena-logo.svg";
-import { Dimmer, Loader, Table, Menu, Label } from "semantic-ui-react";
+import { Dimmer, Loader, Table, Menu } from "semantic-ui-react";
 import { PactContext } from "../contexts/PactContext";
 import { reduceBalance, extractDecimal } from "../utils/reduceBalance";
 import reduceToken from "../utils/reduceToken";
 import { ReactComponent as CloseIcon } from "../assets/images/shared/cross.svg";
+import Search from '../components/shared/Search';
 
 const TitlesContainer = styled.div`
   display: flex;
@@ -35,6 +36,15 @@ const IconsContainer = styled.div`
   div:last-child {
     margin-left: 5px;
   }
+`;
+
+const SearchContainer = styled.div`
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+  padding: 0px 16px 0px 30px;
+  /* text-shadow: 0 0 3px #FFFFFF; */
+  color: #FFFFFF;
 `;
 
 const TotalContainer = styled.div`
@@ -77,9 +87,15 @@ const TotalValue = styled.div`
   }
 `;
 
+const Label = styled.span`
+  font-size: 13px;
+  font-family: montserrat-bold;
+  text-transform: capitalize;
+`;
 
 const StatsContainer = ({ data }) => {
   const pact = React.useContext(PactContext);
+  const [searchValue, setSearchValue] = useState('');
 
 
   React.useEffect(async () => {
@@ -89,6 +105,20 @@ const StatsContainer = ({ data }) => {
   return (
     <>
       <ModalContainer title="reservation stats" containerStyle={{ maxWidth: 650, maxHeight: window.innerHeight - 200, overflowX: "scroll" }}>
+        <SearchContainer>
+        <Label style={{ marginBottom: "8px" }}>search account</Label>
+        <Search
+          fluid
+          containerStyle={{
+            marginBottom: 15,
+            borderRadius: "4px",
+            border: "1px solid #FFFFFF",
+            /* boxShadow: "0 0 5px #FFFFFF" */}}
+          placeholder="Search"
+          value={searchValue}
+          onChange={(e, { value }) => setSearchValue(value)}
+          />
+          </SearchContainer>
         {/* {pact.reservations ? (
         <TotalContainer>
           <TotalTitle>TOTAL:</TotalTitle>
@@ -119,7 +149,11 @@ const StatsContainer = ({ data }) => {
             </Table.Row>
           </Table.Body>
           {pact.reservations ? (
-            Object.values(pact.reservations).map((r, i) =>
+            Object.values(pact.reservations)
+              .filter((r) => {
+                    return r.account.toLocaleLowerCase().includes(searchValue)
+                  })
+              .map((r, i) =>
               r ? (
                 <Table.Body>
                   <Table.Row key={i}>
