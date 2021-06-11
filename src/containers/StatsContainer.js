@@ -89,14 +89,14 @@ const StatsContainer = ({ data }) => {
   return (
     <>
       <ModalContainer title="reservation stats" containerStyle={{ maxWidth: 650, maxHeight: window.innerHeight - 200, overflowX: "scroll" }}>
-        {pact.reservations ? (
+        {/* {pact.reservations ? (
         <TotalContainer>
           <TotalTitle>TOTAL:</TotalTitle>
           <TotalValue>{Object.values(pact.reservations).reduce((t, r) => t + (r["status"] !== 'rejected' ? parseFloat(r["amount-kda"]) : 0), 0)} KDA</TotalValue>
         </TotalContainer>
         ) : (
           ""
-        )}
+        )} */}
         <Table celled basic="very" style={{ color: "#FFFFFF" }}>
           <Table.Header>
             <Table.Row style={{ fontFamily: "montserrat-bold" }}>
@@ -111,6 +111,13 @@ const StatsContainer = ({ data }) => {
               </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
+          <Table.Body>
+              <Table.Row style={{fontSize: "16px", fontWeight: "bold", textShadow: "0 0 3px #FFFFFF" }}>
+              <Table.Cell textAlign="center">TOTAL</Table.Cell>
+              <Table.Cell textAlign="center">{Object.values(pact.reservations).reduce((t, r) => t + (r["status"] !== 'rejected' ? parseFloat(r["amount-kda"]) : 0), 0)} KDA</Table.Cell>
+              <Table.Cell textAlign="center">OPEN</Table.Cell>
+            </Table.Row>
+          </Table.Body>
           {pact.reservations ? (
             Object.values(pact.reservations).map((r, i) =>
               r ? (
@@ -130,7 +137,7 @@ const StatsContainer = ({ data }) => {
               <Loader>Loading</Loader>
             </Dimmer>
           )}
-          {pact.reservations ? (
+          {/* {pact.reservations ? (
             <Table.Body>
               <Table.Row key={999999}>
                 <Table.Cell textAlign="center">TOTAL</Table.Cell>
@@ -142,7 +149,7 @@ const StatsContainer = ({ data }) => {
             </Table.Body>
           ) : (
             ""
-          )}
+          )} */}
         </Table>
       </ModalContainer>
     </>
