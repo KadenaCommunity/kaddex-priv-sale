@@ -37,6 +37,44 @@ const IconsContainer = styled.div`
   }
 `;
 
+const TotalContainer = styled.div`
+  display: flex;
+  flex-flow: row;
+  font-family: montserrat;
+  justify-content: center;
+  width: 100%;
+  font-size: 20px;
+  font-weight: bold;
+  /* text-shadow: 0 0 3px #FFFFFF; */
+  color: #FFFFFF;
+  @media (max-width: ${({ theme: { mediaQueries } }) =>
+      `${mediaQueries.mobilePixel + 1}px`}) {
+    flex-flow: column;
+    align-items: center;
+  }
+`;
+
+const TotalTitle = styled.div`
+  display: flex;
+  margin-right: 10px;
+  
+  @media (max-width: ${({ theme: { mediaQueries } }) =>
+  `${mediaQueries.mobilePixel + 1}px`}) {
+        margin-right: 0px;
+  }
+`;
+
+const TotalValue = styled.div`
+  display: flex;
+  margin-left: 10px;
+ 
+  @media (max-width: ${({ theme: { mediaQueries } }) =>
+  `${mediaQueries.mobilePixel + 1}px`}) {
+        margin-left: 0px;
+  }
+`;
+
+
 const StatsContainer = ({ data }) => {
   const pact = React.useContext(PactContext);
 
@@ -48,6 +86,14 @@ const StatsContainer = ({ data }) => {
   return (
     <>
       <ModalContainer title="reservation stats" containerStyle={{ maxWidth: 650, maxHeight: window.innerHeight - 200, overflowX: "scroll" }}>
+        {pact.reservations? (
+        <TotalContainer>
+          <TotalTitle>TOTAL:</TotalTitle>
+          <TotalValue>{Object.values(pact.reservations).reduce((t, r) => t + (r["status"] !== 'rejected' ? parseFloat(r["amount-kda"]) : 0), 0)} KDA</TotalValue>
+        </TotalContainer>
+        ) : (
+          ""
+        )}
         <Table celled basic="very" style={{ color: "#FFFFFF" }}>
           <Table.Header>
             <Table.Row style={{ fontFamily: "montserrat-bold" }}>
